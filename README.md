@@ -26,7 +26,7 @@ Enough said ... Show me the code
 
 Lets say Bob wrote a function to add numbers
 
-```
+```python
 def add(a, b):
     return a + b
 ```
@@ -35,7 +35,7 @@ Now he does not want others to reinvent the wheel and wishes to make this reusab
 
 So he converts the function into a unit:
 
-```
+```python
 #bobunits.py
 from unitz import unit, done
 
@@ -55,7 +55,7 @@ Concept: __units__ are regular python functions and it should have the following
 
 Now that we can add 2 numbers ... we can use it to create __flow__ out of it. Flow is nothing but assembling units to be run in a certain sequence like below:
 
-```
+```python
 #bobconfig.py
 
 # We import everything from unitzcore .. 
@@ -81,13 +81,13 @@ The config which is a python file already has a dict called `flow` with name of 
 
 Now we run ... we first export the envrironment variables:
 
-```
+```shell
 sj:/Users/sudeepjathar/lab/unitz> source setenv_unitz
 ```
 
 The go to the dir where bobconfig & bobunits are present and do this:
 
-```
+```shell
 sj:sj:/Users/sudeepjathar/lab/py> unitz listf bobconfig
  1. math
 sj:sj:/Users/sudeepjathar/lab/py> unitz listu bobconfig
@@ -105,16 +105,16 @@ sj:sj:/Users/sudeepjathar/lab/py> unitz listu bobconfig
 
 Now run the `math` flow:
 
-```
+```shell
 sj:/Users/sudeepjathar/lab/py> unitz run bobconfig math
 Addition ........................................................................ start
 3 + 2 = 5
 Addition ........................................................................ ok
 ```
 
-Lets modify the flow to add 3 + 2 + 4:
+Lets modify the flow in bobconfig.py to add 3 + 2 + 4:
 
-```
+```python
 flows['math'] = { 
     'order' : ['Addition1', 'Addition2'],
     'instances' : {
@@ -134,7 +134,7 @@ flows['math'] = {
 
 The result:
 
-```
+```shell
 sj:/Users/sudeepjathar/lab/py> unitz run bobconfig math
 Addition1 ....................................................................... start
 3 + 2 = 5
@@ -146,9 +146,9 @@ Addition2 ......................................................................
 
 The `o_addition_result` was stripped of its `o_` and it was used in Addition2. The `'+a' : 'addition_result'` means that before executing Addtion2 copy into the arg `a` the value from `o_addition_result` which was computed by previous unit. In other words we sort of daisy-chained Addition1 and Addtion2 ... I call this feature `chaining`.
 
-The leading '+' in `+a` means that set the value __before__ execution whereas trailing '+' (as in 'a+') would have meant setting value of the param __after__ the execution.
+The leading '+' in `+a` means that set the value __before__ execution whereas trailing '+' (as in `'a+'`) would have meant setting value of the param __after__ the execution.
 
-Enough for readme ... checkout the wiki for more features like inheriting flows & units, chaining.
+Enough for readme ... checkout the wiki for more features & details like inheriting flows & units, chaining.
 
 Wishlist and further scope
 --------------------------
