@@ -18,6 +18,11 @@ Features
 3. Polymorphism at configuration level (explained in wiki)
 3. Chain the units i.e. feed output of one as input to another
 
+Checkout [Wiki Tutorial](https://github.com/sudeep9/unitz/wiki/Tutorial) for demo of features
+
+Stability
+---------
+Pre-Alpha
 
 Installation
 ------------
@@ -169,3 +174,4 @@ Wishlist and further scope
 2. Dry run (or simulation) of the flow
 3. Infrastructure libraries for reuse
 4. Interoperate with units developed in other languages
+5. Move the flow configuration outside python program (something like YAML)
