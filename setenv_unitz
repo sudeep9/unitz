@@ -1,6 +1,8 @@
 export PATH=.:$PATH
-export PYTHONPATH=`pwd`
+export PATH=`pwd`:$PATH
 export PYTHONPATH=$PYTHONPATH:`pwd`/lib
 export PYTHONPATH=$PYTHONPATH:`pwd`/config
 export PYTHONPATH=$PYTHONPATH:`pwd`/tests
+export PYTHONPATH=`pwd`:$PYTHONPATH
+export PYTHONPATH=.:$PYTHONPATH
 
