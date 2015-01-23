@@ -18,7 +18,20 @@ Features
 3. Polymorphism at configuration level (explained in wiki)
 3. Chain the units i.e. feed output of one as input to another
 
- 
+
+Installation
+------------
+Right now unitz is not available on Pypi. It will be in future.  
+Note: only *nix platforms & OSX are supported out of the box. There is no technical problem in supporting windows its just that the bat file to source the env vars has not been written right now.
+
+For now clone the repository and source the `setenv_unitz`:
+
+```shell
+sj:/Users/sudeepjathar/lab/unitz> source setenv_unitz
+```
+The `source` may not work if you have KSH and you can use the dot `.` to source
+
+For windows ... try changing setenv_unitz to its bat file equivalent and source it. I will do it eventually.
 
 
 Enough said ... Show me the code
