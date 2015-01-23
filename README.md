@@ -16,6 +16,15 @@ Enough said ... Show me the code
 Lets say Bob wrote a function to add numbers
 
 ```
+def add(a, b):
+    return a + b
+```
+
+Now he does not want others to reinvent the wheel and wishes to make this reusable. (I know that for some this example is lame ... but imagine instead that this could be something like connecting to database and create test data or transfer a file from machine A to B ...) 
+
+So he converts the function into a unit:
+
+```
 #bobunits.py
 from unitz import unit, done
 
@@ -30,7 +39,8 @@ Concept: __units__ are regular python functions and it should have the following
 
 * They should be stateless (although nothing prevents you to do otherwise)
 * Any output of the computation should be captured in variables starting with name `o_`
-* Should return using inbuilt function `done()` (working on remove this limitation) 
+* More than one output can be captured. 
+* Should return using inbuilt function `done()` (working on to remove this limitation) 
 
 Now that we can add 2 numbers ... we can use it to create __flow__ out of it. Flow is nothing but assembling units to be run in a certain sequence like below:
 
@@ -54,8 +64,9 @@ flows['math'] = {  # 'math' is the name of the flow
         },
     }
 }
-
 ```
+
+The config which is a python file already has a dict called `flow` with name of the flow as key. We then specify the order of the execution using `order`. What we execute are the instances of units defined in `instances`. In this case Bob decided to name it as `Addition` and specified which unit he intends to execute in `unit` and followed by params `a` & `b`.
 
 Now we run ... we first export the envrironment variables:
 
@@ -77,7 +88,8 @@ sj:sj:/Users/sudeepjathar/lab/py> unitz listu bobconfig
 
 ```
 
-`unitz listf <config>` will list all the flows available in the specified config file
+`unitz listf <config>` will list all the flows available in the specified config file.
+
 `unitz listu <config>` will list all the units available from the modules that were specified in `unit_modules.append` .. ignore the rest of units for now .. this is explained in wiki
 
 Now run the `math` flow:
@@ -122,3 +134,7 @@ Addition2 ......................................................................
 ```
 
 The `o_addition_result` was stripped of its `o_` and it was used in Addition2. The `'+a' : 'addition_result'` means that before executing Addtion2 copy into the arg `a` the value from `o_addition_result` which was computed by previous unit. In other words we sort of daisy-chained Addition1 and Addtion2 ... I call this feature `chaining`.
+
+The leading '+' in `+a` means that set the value __before__ execution whereas trailing '+' (as in 'a+') would have meant setting value of the param __after__ the execution.
+
+Enough for readme ... checkout the wiki for more features like inheriting flows & units, chaining.
