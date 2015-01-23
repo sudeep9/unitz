@@ -10,6 +10,17 @@ Why it was developed?
 ---------------------
 One of the primary use case was to enable developers quickly write automation code for their tests (both unit test & black box test). Also the design from start is geared to address automation reuse at company level specially where one team uses code of other teams.
 
+Features
+--------
+
+1. Assemble or compose programs from smaller components (or units)
+2. Inherit units and flows from existing configuration (allows for across team re-usability)
+3. Polymorphism at configuration level (explained in wiki)
+3. Chain the units i.e. feed output of one as input to another
+
+ 
+
+
 Enough said ... Show me the code
 ================================
 
@@ -138,3 +149,10 @@ The `o_addition_result` was stripped of its `o_` and it was used in Addition2. T
 The leading '+' in `+a` means that set the value __before__ execution whereas trailing '+' (as in 'a+') would have meant setting value of the param __after__ the execution.
 
 Enough for readme ... checkout the wiki for more features like inheriting flows & units, chaining.
+
+Wishlist and further scope
+--------------------------
+1. Add UI where one can compose by drag and dropping units
+2. Dry run (or simulation) of the flow
+3. Infrastructure libraries for reuse
+4. Interoperate with units developed in other languages
