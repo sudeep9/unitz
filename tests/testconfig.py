@@ -39,3 +39,17 @@ flows['math_parallel'] = {
         },
     }
 }
+
+flows['std_test'] = {
+    'order' : ['cmd1', 'print_stream'],
+    'instances' : {
+        'cmd1' : {
+            'unit' : 'run_command',
+            'cmd' : 'ls -lrt'
+        },
+        'print_stream' : {
+            'unit' : 'print_stream',
+            '+stream' : 'stdout'
+        }
+    }
+}
