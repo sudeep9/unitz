@@ -8,7 +8,7 @@ log = logging.getLogger()
 
 runInstanceLock = threading.Lock()
 
-def __evaluate(val):
+def __evaluate(ctx, val):
     if not isinstance(val, str):
         return val
 
@@ -26,7 +26,7 @@ def __preRun(unit, ctx, params):
         if param != 'unit':
             if param.startswith('+'):
                 if isinstance(value, str):
-                    ctx.p[param[1:]] = __evaluate(ctx.p[value])
+                    ctx.p[param[1:]] = __evaluate(ctx, ctx.p[value])
                 else:
                     ctx.p[param[1:]] = value
             elif param[-1] not in ('+', '-') :
@@ -38,13 +38,13 @@ def __postRun(unit, ctx, params, status):
             if status is True:
                 if param.endswith('+'):
                     if isinstance(value, str):
-                        ctx.p[param[:-1]] = __evaluate(ctx.p[value])
+                        ctx.p[param[:-1]] = __evaluate(ctx, ctx.p[value])
                     else:
                         ctx.p[param[:-1]] = value
             else:
                 if param.endswith('!'):
                     if isinstance(value, str):
-                        ctx.p[param[:-1]] = __evaluate(ctx.p[value])
+                        ctx.p[param[:-1]] = __evaluate(ctx, ctx.p[value])
                     else:
                         ctx.p[param[:-1]] = value
 
@@ -91,7 +91,7 @@ if __name__ == "__main__":
             return done()
 
     @unit(name = 'mul')
-    def add(a, b, c = 3):
+    def mul(a, b, c = 3):
         try:
             o_result = a * b * c
             print o_result
@@ -125,4 +125,3 @@ if __name__ == "__main__":
         d['order'].append('I1')
 
     runFlow('testflow', d)
-
