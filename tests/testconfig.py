@@ -16,7 +16,7 @@ flows['params'] = {
     },
     'p' : {
       'unit' : 'export_params_from_file',
-      '+param_file' : 'input_param_file'
+      '+param_file' : '=C:\\SJ\\param.txt'
     },
   }
 }

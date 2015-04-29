@@ -8,7 +8,7 @@ log = logging.getLogger()
 
 runInstanceLock = threading.Lock()
 
-def __evaluate(ctx, name, val):
+def __evaluate(ctx, val):
     if not isinstance(val, str):
         return val
 
@@ -17,18 +17,18 @@ def __evaluate(ctx, name, val):
 
     prefix = val[0]
     if prefix == '=':
-        return name
+        return val[1:]
     elif prefix == '@':
         return eval(prefix[1:])
     else:
-        return val
+        return ctx.p[val]
 
 def __preRun(unit, ctx, params):
     for param, value in params.iteritems():
         if param != 'unit':
             if param.startswith('+'):
                 if isinstance(value, str):
-                    ctx.p[param[1:]] = __evaluate(ctx, value, ctx.p[value])
+                    ctx.p[param[1:]] = __evaluate(ctx, value)
                 else:
                     ctx.p[param[1:]] = value
             elif param[-1] not in ('+', '-') :
@@ -40,13 +40,13 @@ def __postRun(unit, ctx, params, status):
             if status is True:
                 if param.endswith('+'):
                     if isinstance(value, str):
-                        ctx.p[param[:-1]] = __evaluate(ctx, value, ctx.p[value])
+                        ctx.p[param[:-1]] = __evaluate(ctx, value)
                     else:
                         ctx.p[param[:-1]] = value
             else:
                 if param.endswith('!'):
                     if isinstance(value, str):
-                        ctx.p[param[:-1]] = __evaluate(ctx, value, ctx.p[value])
+                        ctx.p[param[:-1]] = __evaluate(ctx, value)
                     else:
                         ctx.p[param[:-1]] = value
 
