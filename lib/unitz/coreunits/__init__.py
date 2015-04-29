@@ -69,3 +69,13 @@ def cli_args_positional(c, arglist):
         c.p['input_' + arg] = sys.argv[3 + i+1]
 
     return done()
+
+@unit('add_builtin', enableContext = True)
+def add_builtin(c):
+    __builtins__['myvar'] = 1
+    return done()
+
+@unit('test_unit', enableContext = True)
+def test_unit(c):
+    print myvar
+    return done()    
