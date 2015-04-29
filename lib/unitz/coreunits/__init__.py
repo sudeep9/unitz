@@ -38,3 +38,20 @@ def runParallel(c, instances_to_run):
     finally:
         return done()
 
+@unit('export_params_from_file', enableContext = True)
+def exportParamsInFile(c, param_file):
+    try:
+        with open(param_file_name) as f:
+            for line in f:
+                line = line.rstrip()
+                var, value = line.split(' = ')
+                dataType, param = var.split()
+                if dataType == 'int':
+                    c.p[param] = int(value)
+                else:
+                    c.p[param] = value
+    except Exception, fault:
+        print str(fault)
+        return done(False)
+
+    return done()
