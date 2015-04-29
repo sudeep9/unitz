@@ -32,6 +32,7 @@ def runFlow(args):
             print "{0} {1} start".format(progress[1], "." * (80 - len(progress[1])))
         elif progress[0] == 'instance-status':
             print "{0} {1} {2}".format(progress[1], "." * (80 - len(progress[1])), "ok" if progress[2] else "failed")
+            print
             if not progress[2]:
                 return False
         sys.stdout.flush()
