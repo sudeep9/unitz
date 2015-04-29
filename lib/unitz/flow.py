@@ -20,6 +20,8 @@ def __evaluate(ctx, val):
         return val
     elif prefix == '@':
         return eval(prefix[1:])
+    else:
+        return val
 
 def __preRun(unit, ctx, params):
     for param, value in params.iteritems():

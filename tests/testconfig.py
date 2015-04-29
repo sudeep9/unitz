@@ -3,6 +3,24 @@ from unitzcore import *
 
 unit_modules.append('testunits')
 
+flows['params'] = {
+  'order' : ['args', 'print_c', 'p'],
+  'instances' : {
+    'args' : {
+      'unit' : 'cli_args_positional',
+      'arglist' : ['param_file']
+    },
+    'print_c' : {
+      'unit' : 'print_ctx',
+      'params' : ['input_param_file']
+    },
+    'p' : {
+      'unit' : 'export_params_from_file',
+      '+param_file' : 'input_param_file'
+    },
+  }
+}
+
 flows['math'] = {
     'order' : ['Addition', 'Multiplication'],
     'instances' : {

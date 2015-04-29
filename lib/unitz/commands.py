@@ -34,7 +34,8 @@ def executeCommand(cmdname, args):
         cmdinfo = COMMANDS[cmdname]
         status = cmdinfo[0](args)
         return status
-    except KeyError:
+    except KeyError, fault:
+        print("KeyError:", str(fault))
         help([cmdname])
         return False
 

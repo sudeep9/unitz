@@ -41,11 +41,12 @@ def runParallel(c, instances_to_run):
 @unit('export_params_from_file', enableContext = True)
 def exportParamsInFile(c, param_file):
     try:
-        with open(param_file_name) as f:
+        with open(param_file) as f:
             for line in f:
                 line = line.rstrip()
                 var, value = line.split(' = ')
                 dataType, param = var.split()
+                print dataType, param
                 if dataType == 'int':
                     c.p[param] = int(value)
                 else:
@@ -53,5 +54,18 @@ def exportParamsInFile(c, param_file):
     except Exception, fault:
         print str(fault)
         return done(False)
+
+    return done()
+
+@unit('cli_args_positional', enableContext = True)
+def cli_args_positional(c, arglist):
+    import sys    
+    if len(sys.argv[4:]) < len(arglist):
+        print "Error: not enough args"
+        print "args:", " ".join(["<{0}>".format(a) for a in arglist])
+        return done(False)
+
+    for i, arg in enumerate(arglist):
+        c.p['input_' + arg] = sys.argv[3 + i+1]
 
     return done()
