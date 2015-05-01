@@ -1,11 +1,9 @@
-
 include: unitz
-
 unit_modules: [testunits]
 
 flows:
     math:
-        - testunits:add:
+        - add:
             a: 3
             b: 2
         - assert:
@@ -13,30 +11,7 @@ flows:
                 a: 3
                 b: 2
         - mul:
-        
-    fibo:
-        - add:
-            a: 0
-            b: 1
-        - add:
-            - +b: a
-            - +a: result
-        - add:
-            - +b: a
-            - +a: result
-        - add:
-            - +b: a
-            - +a: result
-        - add:
-            - +b: a
-            - +a: result
-        - add:
-            - +b: a
-            - +a: result
-        - add:
-            - +b: a
-            - +a: result
-            
+    #------------------------------------------------------
     math_parallel:
         - run_parallel:
             instances_to_run:
@@ -46,12 +21,13 @@ flows:
                 mul:
                     a: 10
                     b: 20
+    #------------------------------------------------------
     std_test:
         - run_command:
             cmd: ls -lrt
         - print_stream:
             +stream: stdout
-            
+    #------------------------------------------------------
     params_test:
         - cli_args_positional:
             arglist: [param_file]
