@@ -64,14 +64,7 @@ def add(a, b):
     return done()
 ```
 
-Concept: __units__ are regular python functions and it should have the following traits:
-
-* They should be stateless (although nothing prevents you to do otherwise)
-* Any output of the computation should be captured in variables starting with name `o_`
-* More than one output can be captured. 
-* Should return using inbuilt function `done()` (working on to remove this limitation) 
-
-Now that we can add 2 numbers ... we can use it to create __flow__ out of it. Flow is nothing but assembling units to be run in a certain sequence. Flows are stored in configuration file which is a YAML file, like below:
+Lets add 3 + 2 by creating a __flow__ in a config file (YAML file):
 
 ```yaml
 bobconfig.yml
@@ -86,8 +79,6 @@ flows:
             b: 2
 ```
 
-Note: Since its YAML file, indentation is important.
-
 Before we run ... we first export the envrironment variables:
 
 ```shell
@@ -98,10 +89,19 @@ Now run the `math` flow:
 
 ```shell
 sj:/Users/sudeepjathar/lab/py> unitz run bobconfig math
-Addition ........................................................................ start
+add_numbers ..................................................................... start
 3 + 2 = 5
-Addition ........................................................................ ok
+add_numbers ..................................................................... ok
 ```
+
+Concept: __units__ are regular python functions and it should have the following traits:
+
+* They should be stateless (although nothing prevents you to do otherwise)
+* Any output of the computation should be captured in variables starting with name `o_`
+* More than one output can be captured. 
+* Should return using inbuilt function `done()` (working on to remove this limitation) 
+Note: Since its YAML file, indentation is important.
+
 
 Lets modify the flow in bobconfig.py to add 3 + 2 + 4:
 
@@ -125,12 +125,13 @@ The result:
 
 ```shell
 sj:/Users/sudeepjathar/lab/py> unitz run bobconfig math
-Addition1 ....................................................................... start
+add_numbers ..................................................................... start
 3 + 2 = 5
-Addition1 ....................................................................... ok
-Addition2 ....................................................................... start
-5 + 4 = 9
-Addition2 ....................................................................... ok
+add_numbers ..................................................................... ok
+
+add_numbers ..................................................................... start
+5 + 2 = 7
+add_numbers ..................................................................... ok
 ```
 
 The `o_addition_result` was stripped of its `o_` and it was used in the second addition. The `'+a' : 'addition_result'` means that before executing copy into the arg `a` the value from `o_addition_result` which was computed by previous unit. In other words we sort of daisy-chained the two additions... I call this feature `chaining`.
