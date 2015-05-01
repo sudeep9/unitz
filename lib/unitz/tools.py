@@ -2,6 +2,7 @@
 from unitz import unit, done, Context, REGISTRY
 from importlib import import_module
 import unitz.flow
+import unitz
 import sys
 
 
@@ -19,7 +20,7 @@ def runFlow(args):
     flowname = args[1]
     ctx = Context()
 
-    config = import_module(configname)
+    config = unitz.load_config(configname)
 
     if flowname not in config.flows:
         print "Error: flow name {0} not found".format(flowname)
@@ -40,14 +41,14 @@ def runFlow(args):
             
 def listFlows(args):
     configname = args[0]
-    config = import_module(configname)
+    config = unitz.load_config(configname)
 
     for i, f in enumerate(config.flows):
         print "{0:2}. {1}".format(i + 1, f)
 
 def listUnits(args):
     configname = args[0]
-    config = import_module(configname)
+    config = unitz.load_config(configname)
     loadUnitModules(config)
 
     for i, name  in enumerate([k for k in REGISTRY if not ':' in k]):

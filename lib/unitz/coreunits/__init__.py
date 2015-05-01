@@ -23,9 +23,9 @@ def runParallel(c, instances_to_run):
         import threading
         from unitz.flow import runInstance
         threads = []
-        for inst in instances_to_run:
-            print "Starting thread: {0}".format(inst['unit'])
-            t = threading.Thread(target = runInstance, args = (c, inst))
+        for inst, params in instances_to_run.iteritems():
+            print "Starting thread: {0}".format(inst)
+            t = threading.Thread(target = runInstance, args = (c, inst, params))
             threads.append(t)
             t.start()
 

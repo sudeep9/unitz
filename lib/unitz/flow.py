@@ -51,8 +51,7 @@ def __postRun(unit, ctx, params, status):
                         ctx.p[param[:-1]] = value
 
 
-def runInstance(ctx, params):
-    name = params['unit']
+def runInstance(ctx, name, params):
     unit = unitz.getunit(name)
 
     with runInstanceLock:
@@ -70,14 +69,12 @@ def runFlow(name, config, ctx = None):
     if ctx is None:
         ctx = Context()
 
-    order = config['order']
-    instances = config['instances']
-
-    for instName in order:
-        yield ('instance-start', instName)
-        instParams = instances[instName]
-        status = runInstance(ctx, instParams)
-        yield ('instance-status', instName, status)
+    for instance in config:
+        unit_name = instance.keys()[0]
+        yield ('instance-start', unit_name)
+        instParams = instance[unit_name]
+        status = runInstance(ctx, unit_name, instParams)
+        yield ('instance-status', unit_name, status)
 
 
 if __name__ == "__main__":

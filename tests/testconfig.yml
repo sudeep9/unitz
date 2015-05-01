@@ -1,0 +1,24 @@
+
+include: unitz
+
+unit_modules: [testunits]
+
+flows:
+    math:
+        - add:
+            a: 3
+            b: 2
+        - mul:
+            +a: result
+            b: 4
+            
+    math_parallel:
+        - run_parallel:
+            instances_to_run:
+                add:
+                    a: 3
+                    b: 2
+                mul:
+                    a: 10
+                    b: 20
+                
