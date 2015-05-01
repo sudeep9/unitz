@@ -8,9 +8,34 @@ flows:
         - add:
             a: 3
             b: 2
+        - assert:
+            checks:
+                a: 3
+                b: 2
         - mul:
-            +a: result
-            b: 4
+        
+    fibo:
+        - add:
+            a: 0
+            b: 1
+        - add:
+            - +b: a
+            - +a: result
+        - add:
+            - +b: a
+            - +a: result
+        - add:
+            - +b: a
+            - +a: result
+        - add:
+            - +b: a
+            - +a: result
+        - add:
+            - +b: a
+            - +a: result
+        - add:
+            - +b: a
+            - +a: result
             
     math_parallel:
         - run_parallel:
@@ -21,4 +46,18 @@ flows:
                 mul:
                     a: 10
                     b: 20
-                
+    std_test:
+        - run_command:
+            cmd: ls -lrt
+        - print_stream:
+            +stream: stdout
+            
+    params_test:
+        - cli_args_positional:
+            arglist: [param_file]
+        - print_ctx:
+            params: [input_param_file]
+        - export_params_from_file:
+            +param_file: input_param_file
+        - print_ctx:
+            params: [x, country]

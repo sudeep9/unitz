@@ -79,3 +79,18 @@ def add_builtin(c):
 def test_unit(c):
     print myvar
     return done()    
+
+
+@unit('assert', enableContext = True)
+def unit_assert(c, checks, equality = True):
+    for param, value in checks.iteritems():
+        if param not in c.p:
+            print 'Error: param [%s] not in context' % param
+            return done(False)
+        actual_value = c.p[param]
+        if (equality and actual_value != value) or (not equality and actual_value == value):
+            print 'Error: assert failed equality: %s param: [%s]  value: [%s] actual value: [%s]' % (equality, 
+            param, value, actual_value)
+            return done(False)
+            
+    return done()
