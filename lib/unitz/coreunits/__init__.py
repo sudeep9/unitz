@@ -70,15 +70,11 @@ def cli_args_positional(c, arglist):
 
     return done()
 
-@unit('add_builtin', enableContext = True)
-def add_builtin(c):
-    __builtins__['myvar'] = 1
+@unit('add_builtins', enableContext = True)
+def add_builtin(c, builtins):
+    for param, value in builtins.iteritems():
+        __builtins__[param] = value
     return done()
-
-@unit('test_unit', enableContext = True)
-def test_unit(c):
-    print myvar
-    return done()    
 
 
 @unit('assert', enableContext = True)

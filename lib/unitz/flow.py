@@ -88,6 +88,8 @@ def runFlow(name, config, ctx = None):
 
     for instance in config:
         unit_name = instance.keys()[0]
+        if unit_name[0] == '~':
+            continue
         yield ('instance-start', unit_name)
         instParams = instance[unit_name]
         status = runInstance(ctx, unit_name, instParams)
