@@ -15,7 +15,6 @@ def __evaluate(ctx, val):
     if len(val) <= 1:
         return ctx.p[val]
 
-    print val
     if val.startswith('= '):
         return val[2:]
     elif val.startswith('eval '):
