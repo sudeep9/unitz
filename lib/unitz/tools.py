@@ -28,6 +28,9 @@ def runFlow(args):
 
     loadUnitModules(config)
     flowconfig = config.flows[flowname]
+    ctx.p['unitz_flow_name'] = flowname
+    ctx.p['unitz_flow_config'] = flowconfig
+    
     for progress in unitz.flow.runFlow(flowname, flowconfig, ctx):
         if progress[0] == 'instance-start':
             print "{0} {1} start".format(progress[1], "." * (80 - len(progress[1])))
