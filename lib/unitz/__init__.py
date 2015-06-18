@@ -3,7 +3,9 @@ from __future__ import print_function
 from collections import OrderedDict
 from functools import wraps
 from inspect import getargspec
+import os
 import sys
+import yaml as y
 
 REGISTRY = OrderedDict()
 
@@ -61,6 +63,13 @@ class Unit:
     def __call__(self, ctx):
         args = self.__constructCallingArgs(ctx)
         return self.func(**args)
+        
+        
+class Config:
+    def __init__(self):
+        self.flows = {}
+        self.unit_modules = []
+
 
 def unit(name, enableContext = False):
     def __unit(func):
@@ -82,7 +91,34 @@ def done(status = True):
     op = {k[2:] : v  for k,v in caller.f_locals.iteritems() if k.startswith('o_')}
     return (status, op)
 
-    
+def which(config_file):
+    for path in sys.path:
+        full_path = os.path.join(path, config_file)
+        if os.path.exists(full_path):
+            return full_path
+    return None
+
+def load_config(config_file):
+    actual_config_file = config_file + '.yml'
+    full_path = which(actual_config_file) 
+    if full_path is None:
+        raise Exception("Error: Config file %s not found" % actual_config_file)
+        
+    config = Config()
+    stream = open(full_path)
+
+    config_docs = y.load_all(stream)
+    for doc in config_docs:
+        if 'include' in doc:
+            included_config = load_config(doc['include'])
+            config.flows.update(included_config.flows)
+            config.unit_modules.extend(included_config.unit_modules)
+        if 'flows' in doc:
+            config.flows.update(doc['flows'])
+        if 'unit_modules' in doc:
+            config.unit_modules.extend(doc['unit_modules'])
+            
+    return config
 
 def getunit(name):
     return REGISTRY[name]
@@ -101,8 +137,8 @@ if __name__ == "__main__":
         elif op == '*':
             o_prod = a * b
 
-        return done()
     
+        return done()
     c = Context()
     c.p['op'] = '+'
     c.p['a'] = 1
@@ -115,4 +151,3 @@ if __name__ == "__main__":
     print(u(c))
     print("context:", c.p)
     
-

@@ -1,0 +1,11 @@
+include: unitz
+unit_modules: [tut_units]
+
+flows:
+    sum_ints:
+        - cli_args_positional:
+            arglist: [filename]
+        - Parse file newline:
+            +filename: input_filename
+        - Sum integer list:
+            +int_list: parsed_ints

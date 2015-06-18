@@ -23,9 +23,9 @@ def runParallel(c, instances_to_run):
         import threading
         from unitz.flow import runInstance
         threads = []
-        for inst in instances_to_run:
-            print "Starting thread: {0}".format(inst['unit'])
-            t = threading.Thread(target = runInstance, args = (c, inst))
+        for inst, params in instances_to_run.iteritems():
+            print "Starting thread: {0}".format(inst)
+            t = threading.Thread(target = runInstance, args = (c, inst, params))
             threads.append(t)
             t.start()
 
@@ -70,12 +70,23 @@ def cli_args_positional(c, arglist):
 
     return done()
 
-@unit('add_builtin', enableContext = True)
-def add_builtin(c):
-    __builtins__['myvar'] = 1
+@unit('add_builtins', enableContext = True)
+def add_builtin(c, builtins):
+    for param, value in builtins.iteritems():
+        __builtins__[param] = value
     return done()
 
-@unit('test_unit', enableContext = True)
-def test_unit(c):
-    print myvar
-    return done()    
+
+@unit('assert', enableContext = True)
+def unit_assert(c, checks, equality = True):
+    for param, value in checks.iteritems():
+        if param not in c.p:
+            print 'Error: param [%s] not in context' % param
+            return done(False)
+        actual_value = c.p[param]
+        if (equality and actual_value != value) or (not equality and actual_value == value):
+            print 'Error: assert failed equality: %s param: [%s]  value: [%s] actual value: [%s]' % (equality, 
+            param, value, actual_value)
+            return done(False)
+            
+    return done()

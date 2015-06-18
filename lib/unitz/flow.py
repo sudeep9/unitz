@@ -15,46 +15,61 @@ def __evaluate(ctx, val):
     if len(val) <= 1:
         return ctx.p[val]
 
-    prefix = val[0]
-    if prefix == '=':
-        return val[1:]
-    elif prefix == '@':
-        return eval(prefix[1:])
+    if val.startswith('= '):
+        return val[2:]
+    elif val.startswith('eval '):
+        return eval(val[5:])
     else:
         return ctx.p[val]
 
+def __preRun_evaluate(ctx, param, value):
+    if param.startswith('+'):
+        if isinstance(value, str):
+            ctx.p[param[1:]] = __evaluate(ctx, value)
+        else:
+            ctx.p[param[1:]] = value
+    elif param[-1] not in ('+', '-') :
+        ctx.p[param] = value
+    
 def __preRun(unit, ctx, params):
-    for param, value in params.iteritems():
-        if param != 'unit':
-            if param.startswith('+'):
-                if isinstance(value, str):
-                    ctx.p[param[1:]] = __evaluate(ctx, value)
-                else:
-                    ctx.p[param[1:]] = value
-            elif param[-1] not in ('+', '-') :
-                ctx.p[param] = value
+    if isinstance(params, dict):
+        for param, value in params.iteritems():
+            __preRun_evaluate(ctx, param, value)
+    elif isinstance(params, list    ):
+        for param_dict in params:
+            param = param_dict.keys()[0]
+            value = param_dict[param]
+            __preRun_evaluate(ctx, param, value)
+            
+
+def __postRun_evaluate(ctx, status, param, value):            
+    if status is True:
+        if param.endswith('+'):
+            if isinstance(value, str):
+                ctx.p[param[:-1]] = __evaluate(ctx, value)
+            else:
+                ctx.p[param[:-1]] = value
+    else:
+        if param.endswith('!'):
+            if isinstance(value, str):
+                ctx.p[param[:-1]] = __evaluate(ctx, value)
+            else:
+                ctx.p[param[:-1]] = value
 
 def __postRun(unit, ctx, params, status):
-    for param, value in params.iteritems():
-        if param != 'unit':
-            if status is True:
-                if param.endswith('+'):
-                    if isinstance(value, str):
-                        ctx.p[param[:-1]] = __evaluate(ctx, value)
-                    else:
-                        ctx.p[param[:-1]] = value
-            else:
-                if param.endswith('!'):
-                    if isinstance(value, str):
-                        ctx.p[param[:-1]] = __evaluate(ctx, value)
-                    else:
-                        ctx.p[param[:-1]] = value
+    if isinstance(params, dict):
+        for param, value in params.iteritems():
+            __postRun_evaluate(ctx, status, param, value)
+    elif isinstance(params, list):
+        for param_dict in params:
+            param = param_dict.keys()[0]
+            value = param_dict[param]
+            __postRun_evaluate(ctx, status, param, value)
 
 
-def runInstance(ctx, params):
-    name = params['unit']
+def runInstance(ctx, name, params):
     unit = unitz.getunit(name)
-
+    
     with runInstanceLock:
         __preRun(unit, ctx, params)
 
@@ -70,14 +85,14 @@ def runFlow(name, config, ctx = None):
     if ctx is None:
         ctx = Context()
 
-    order = config['order']
-    instances = config['instances']
-
-    for instName in order:
-        yield ('instance-start', instName)
-        instParams = instances[instName]
-        status = runInstance(ctx, instParams)
-        yield ('instance-status', instName, status)
+    for instance in config:
+        unit_name = instance.keys()[0]
+        if unit_name[0] == '~':
+            continue
+        yield ('instance-start', unit_name)
+        instParams = instance[unit_name]
+        status = runInstance(ctx, unit_name, instParams)
+        yield ('instance-status', unit_name, status)
 
 
 if __name__ == "__main__":
