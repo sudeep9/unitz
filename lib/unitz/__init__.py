@@ -88,7 +88,10 @@ def unit(name, enableContext = False):
 
 def done(status = True):
     caller = sys._getframe(1)
-    op = {k[2:] : v  for k,v in caller.f_locals.iteritems() if k.startswith('o_')}
+    op = {}
+    for k,v in caller.f_locals.iteritems():
+        if k.startswith('o_'):
+            op[k[2:]] = v
     return (status, op)
 
 def which(config_file):
