@@ -1,2 +1,2 @@
 
-unit_modules: [unitz.coreunits, os_units]
+unit_modules: [unitz.coreunits, os_units, list_units]
